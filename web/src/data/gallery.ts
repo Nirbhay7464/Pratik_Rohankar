@@ -20,7 +20,7 @@ export const galleryImages: GalleryImage[] = [
   {
     id: 1,
     category: "wedding",
-    src: "/wedding1.jpg",
+    src: "/Wedding1.jpg",
     alt: "Wedding photography moment",
   },
   {
