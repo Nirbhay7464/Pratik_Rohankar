@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;   /* cinematic black */
+  --foreground: #ededed;   /* soft white */
+  --accent: #c9a46a;       /* gold accent */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+
+  /* fonts (already coming from layout.js) */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Headings → cinematic serif */
+h1, h2, h3, h4 {
+  font-family: var(--font-playfair);
+  letter-spacing: 0.02em;
+}
+
+/* Smooth scroll for premium feel */
+html {
+  scroll-behavior: smooth;
+}
