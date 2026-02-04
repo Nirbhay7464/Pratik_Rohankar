@@ -18,6 +18,14 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [menuOpen]);
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "#about" },
@@ -39,118 +47,128 @@ const Navbar = () => {
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
         scrolled 
-          ? "py-3 bg-black/60 backdrop-blur-xl border-b border-white/5" 
-          : "py-6 bg-transparent"
+          ? "py-4 bg-black/60 backdrop-blur-xl border-b border-white/5" 
+          : "py-8 bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-8 flex items-center justify-between">
         
-        {/* Logo Only */}
-        <Link href="/" className="relative h-10 w-32 md:h-12 md:w-40 transition-transform duration-300 hover:scale-105">
-          <Image 
-            src="/logo.png" 
-            alt="Logo" 
-            fill 
-            className="object-contain object-left"
-            priority 
-          />
+        {/* Main Logo - Hides when menu is open to prevent overlap */}
+        <Link 
+          href="/" 
+          className={`relative h-8 w-32 md:h-10 md:w-40 z-[110] transition-opacity duration-300 ${
+            menuOpen ? "opacity-0 invisible" : "opacity-100 visible"
+          }`}
+        >
+          <Image src="/logo.png" alt="Logo" fill className="object-contain object-left" priority />
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-10">
           {navLinks.map((link) => (
-            <Link 
-              key={link.name} 
-              href={link.href} 
-              className="relative text-[10px] uppercase tracking-widest text-white/70 hover:text-white transition-colors group"
-            >
+            <Link key={link.name} href={link.href} className="text-[10px] uppercase tracking-[0.2em] text-white/70 hover:text-white transition-colors">
               {link.name}
-              <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--color-accent)] transition-all group-hover:w-full" />
             </Link>
           ))}
-
-          {/* Portfolio Dropdown */}
-          <div className="relative group">
-            <button className="flex items-center gap-1 text-[10px] uppercase tracking-widest text-white/70 group-hover:text-white transition-colors">
-              Portfolio <ChevronDown size={14} className="group-hover:rotate-180 transition-transform" />
-            </button>
-
-            <div className="absolute left-1/2 -translate-x-1/2 top-full mt-4 w-56 bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 p-2 shadow-2xl">
-              {portfolioItems.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="block px-4 py-3 text-[11px] uppercase tracking-tight text-white/60 hover:text-white hover:bg-white/5 rounded-xl transition"
-                >
-                  {item.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <a
-            href="https://wa.me/919999999999"
-            className="px-6 py-2.5 text-[10px] uppercase tracking-[0.15em] font-bold rounded-full bg-white text-black hover:bg-[var(--color-accent)] transition-colors"
-          >
+          <a href="https://wa.me/919999999999" className="px-8 py-3 text-[10px] uppercase tracking-[0.2em] font-bold rounded-full bg-white text-black">
             Book Now
           </a>
         </nav>
 
-        {/* Mobile Toggle */}
-        <button onClick={() => setMenuOpen(!menuOpen)} className="md:hidden text-white p-2">
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Mobile Toggle Trigger */}
+        <button 
+          onClick={() => setMenuOpen(!menuOpen)} 
+          className="md:hidden text-white p-2 z-[130] relative"
+        >
+          {menuOpen ? <X size={26} strokeWidth={1.5} /> : <Menu size={26} strokeWidth={1.5} />}
         </button>
       </div>
 
-      {/* Full-Screen Mobile Menu */}
-      <AnimatePresence>
+      {/* Premium Mobile Menu */}
+      <AnimatePresence mode="wait">
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: "100%" }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed inset-0 bg-black z-[90] md:hidden flex flex-col justify-center px-10"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "tween", duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 h-screen w-full bg-black z-[120] md:hidden flex flex-col"
           >
-            <div className="flex flex-col gap-8">
-              {navLinks.map((link, i) => (
-                <motion.div
+            {/* Dedicated Menu Header to house the logo while menu is active */}
+            <div className={`w-full px-8 shrink-0 bg-black ${scrolled ? "py-4" : "py-8"}`}>
+               <div className="relative h-8 w-32">
+                  <Image src="/logo.png" alt="Logo" fill className="object-contain object-left" />
+               </div>
+            </div>
+
+            {/* Scrollable Content */}
+            <div className="flex-1 overflow-y-auto px-10 pb-10 pt-6">
+              <div className="flex flex-col gap-10">
+                {navLinks.map((link, i) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <Link 
+                      href={link.href} 
+                      onClick={() => setMenuOpen(false)}
+                      className="text-[14px] uppercase tracking-[0.3em] text-white font-medium hover:text-white/60 transition-all border-b border-white/10 pb-5 block"
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+                
+                <div className="mt-4">
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-white/40 mb-10 font-bold">
+                    Portfolio
+                  </p>
+                  <div className="grid grid-cols-2 gap-y-10 gap-x-4">
+                    {portfolioItems.map((item, i) => (
+                      <motion.div
+                        key={item.name}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.4 + (i * 0.05) }}
+                      >
+                        <Link 
+                          href={item.href} 
+                          onClick={() => setMenuOpen(false)}
+                          className="text-[11px] uppercase tracking-[0.2em] text-white/90 hover:text-white font-medium"
+                        >
+                          {item.name}
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Footer Section */}
+                <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  key={link.name}
+                  transition={{ delay: 0.7 }}
+                  className="mt-12 pt-10 border-t border-white/10 flex flex-col items-center"
                 >
-                  <Link 
-                    href={link.href} 
-                    onClick={() => setMenuOpen(false)}
-                    className="text-4xl font-serif italic text-white"
+                  <a 
+                    href="https://wa.me/919999999999" 
+                    className="block w-full py-4 bg-white text-black text-center text-[11px] font-bold uppercase rounded-full tracking-[0.2em] shadow-2xl mb-12"
                   >
-                    {link.name}
-                  </Link>
+                    Whatsapp Booking
+                  </a>
+                  
+                  <div className="text-center space-y-2">
+                    <p className="text-[10px] uppercase tracking-[0.4em] text-white/50">
+                      Pratik Rohankar Photography
+                    </p>
+                    <p className="text-[8px] uppercase tracking-[0.2em] text-white/20">
+                      Creating visual legacies since 2024
+                    </p>
+                  </div>
                 </motion.div>
-              ))}
-              
-              <div className="h-[1px] w-full bg-white/10 my-4" />
-              
-              <div className="grid grid-cols-2 gap-4">
-                {portfolioItems.map((item) => (
-                  <Link 
-                    key={item.name} 
-                    href={item.href} 
-                    onClick={() => setMenuOpen(false)}
-                    className="text-sm text-white/50"
-                  >
-                    {item.name}
-                  </Link>
-                ))}
               </div>
-
-              <a
-                href="https://wa.me/919999999999"
-                className="mt-6 w-full py-4 text-center rounded-full bg-[var(--color-accent)] text-black font-bold"
-              >
-                WhatsApp Booking
-              </a>
             </div>
           </motion.div>
         )}
