@@ -8,7 +8,9 @@ import {
   Instagram,
   Phone,
   MessageCircle,
-  X
+  X,
+  MenuSquare,
+  MenuIcon
 } from "lucide-react";
 
 const SocialBar = () => {
@@ -68,7 +70,7 @@ const SocialBar = () => {
           whileTap={{ scale: 0.9 }}
           className="md:hidden w-12 h-12 rounded-full bg-black/60 backdrop-blur-xl border border-white/20 flex items-center justify-center text-white shadow-2xl transition-all"
         >
-          {isOpen ? <X size={20} /> : <MessageCircle size={20} className="fill-white/10" />}
+          {isOpen ? <X size={20} /> : <MenuIcon size={20} className="fill-white/10" />}
         </motion.button>
 
         {/* Icons List */}

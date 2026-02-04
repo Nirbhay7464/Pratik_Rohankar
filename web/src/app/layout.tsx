@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist_Mono, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import SocialBar from "@/components/SocialBar";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${inter.variable} ${playfair.variable} ${geistMono.variable} antialiased`}>
         <SocialBar/>
         {children}
+        <WhatsAppButton/>
       </body>
     </html>
   );

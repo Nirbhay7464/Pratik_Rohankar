@@ -60,10 +60,10 @@ const Footer = () => {
           <div className="md:col-span-3 lg:col-span-2 space-y-8">
             <h4 className="text-[10px] uppercase tracking-[0.4em] text-[#D4AF37] font-bold">The Studio</h4>
             <ul className="space-y-5">
-              {["About", "Services", "Portfolio", "Contact", "The Vault"].map((item) => (
+              {["About", "Services", "Portfolio", "Contact","Videos"].map((item) => (
                 <li key={item} className="overflow-hidden">
                   <Link 
-                    href={item === "The Vault" ? "/vault" : `#${item.toLowerCase()}`} 
+                    href={item === "The Vault" ? "/#portfolio" : `#${item.toLowerCase()}`} 
                     className="group flex items-center gap-3 text-xs uppercase tracking-widest text-gray-400 hover:text-white transition-all duration-300"
                   >
                     <span className="w-0 h-[1px] bg-[#D4AF37] group-hover:w-4 transition-all duration-300" />
